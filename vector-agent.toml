@@ -1,0 +1,31 @@
+# Vector 에이전트 최종 설정 파일
+
+# Source: 파일 읽기
+[sources.file]
+type         = "file"
+include      = ["/var/log/syslog", "/var/log/myapp/*.log", "/var/log/test.log"]
+ignore_older = 86400
+
+# 2) 기존 Agent -> Aggregator 전송 부분
+# [sinks.vector_out]
+# type    = "vector"
+# inputs  = ["file"]
+# address = "221.144.36.127:9000"
+# healthcheck.enabled = false
+
+# Kafka raw-logs 토픽으로 전송
+[sinks.kafka_raw]
+type              = "kafka"  
+inputs            = ["file"]  
+bootstrap_servers = "221.144.36.127:9092,221.144.36.127:9192,221.144.36.127:9292"
+topic             = "raw-logs"  
+encoding.codec    = "json"  
+compression       = "none"  
+
+# (선택) 메시지 키를 파일 경로나 특정 필드로 지정하려면:
+# key_field = "host"
+
+# (선택) 배치 전송 튜닝
+# batch.max_size     = 500
+# batch.timeout_secs = 1
+

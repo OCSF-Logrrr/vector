@@ -1,0 +1,12 @@
+services:
+  vector-agent:
+    image: timberio/vector:latest-alpine
+    container_name: vector-agent
+    restart: unless-stopped
+    entrypoint: ["vector", "-c", "/etc/vector/vector.toml"]
+    volumes:
+      # 호스트 로그 디렉터리를 read-only로 마운트
+      - /var/log:/var/log:ro
+      # 설정 파일
+      - ./vector-agent.toml:/etc/vector/vector.toml:ro
+
